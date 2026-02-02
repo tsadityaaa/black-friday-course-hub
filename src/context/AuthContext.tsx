@@ -21,13 +21,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     // Check localStorage for existing session
     const storedUser = localStorage.getItem("currentUser");
-    const storedSubscriptions = localStorage.getItem("subscriptions");
     
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    if (storedSubscriptions) {
-      setSubscriptions(JSON.parse(storedSubscriptions));
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      
+      // Load user-specific subscriptions
+      const storedSubscriptions = localStorage.getItem(`subscriptions_${parsedUser.id}`);
+      if (storedSubscriptions) {
+        setSubscriptions(JSON.parse(storedSubscriptions));
+      }
     }
   }, []);
 
